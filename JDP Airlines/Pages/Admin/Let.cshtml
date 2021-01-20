@@ -1,0 +1,183 @@
+﻿@page
+@model JDP_Airlines.Pages.Admin.LetModel
+@{
+}
+<script>
+    $('select').selectpicker();
+</script>
+
+<h2 class="text-center mb-3">
+    @if (Model.Let.ID == Guid.Empty)
+    {
+        <span>Dodaj let</span>
+    }
+    else
+    {
+        <span>Azuriraj let</span>
+    }
+
+</h2>
+<div class="row justify-content-center">
+    <div class="col-6">
+        <form method="post">
+            @if (Model.ErrorMessage != null)
+            {
+                <label style="color:red">@Model.ErrorMessage</label>
+            }
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Vreme poletanja</label>
+                <div class="col-8">
+                    <input type="datetime-local" class="form-control" asp-for="@Model.Let.VremePoletanja" value="@Model.Let.VremePoletanja.ToString("yyyy-MM-ddThh:mm")" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Vreme sletanja</label>
+                <div class="col-8">
+                    <input type="datetime-local" class="form-control" asp-for="@Model.Let.VremeSletanja" value="@Model.Let.VremeSletanja.ToString("yyyy-MM-ddThh:mm")" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-5 col-form-label">Tip</label>
+                <div class="col-7 row">
+                    <input class="form-control col-1" checked type="radio" id="false" asp-for="@Model.Let.Putnicki" value="false">
+                    <label class="form-control col-4 ml-1 mr-2" asp-for="@Model.Let.Putnicki">Teretni</label>
+                    <input class="form-control col-1" type="radio" id="true" asp-for="@Model.Let.Putnicki" value="true">
+                    <label class="form-control col-4 ml-1 mr-2" asp-for="@Model.Let.Putnicki">Putnicki</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Od</label>
+                <div class="col-8">
+                    <select class="form-control" asp-for="@Model.Let.LetiSa.Id">
+                        <option value=""></option>
+                        @foreach (var aerodrom in Model.Aerodromi)
+                        {
+                            <option value="@aerodrom.Id">@("\"" + aerodrom.Naziv + "\" - " + aerodrom.Grad + ", " + aerodrom.Drzava)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Ka</label>
+                <div class="col-8">
+                    <select class="form-control" asp-for="@Model.Let.LetiNa.Id">
+                        <option value=""></option>
+                        @foreach (var aerodrom in Model.Aerodromi)
+                        {
+                            <option value="@aerodrom.Id">@("\"" + aerodrom.Naziv + "\" - " + aerodrom.Grad + ", " + aerodrom.Drzava)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Avion</label>
+                <div class="col-8">
+                    <select class="form-control" asp-for="@Model.Let.Avion.ID">
+                        <option value=""></option>
+                        @foreach (var avion in Model.Avioni)
+                        {
+                            <option value="@avion.ID">@("\"" + avion.Proizvodjac + "\" (" + avion.GodinaProizvodnje + ")")</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Pilot</label>
+                <div class="col-8">
+                    <select class="form-control" asp-for="@Model.Let.Pilot.Id">
+                        <option value=""></option>
+                        @foreach (var pilot in Model.Piloti)
+                        {
+                            <option value="@pilot.Id">@(pilot.Ime + " " + pilot.Prezime)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Kopilot</label>
+                <div class="col-8">
+                    <select class="form-control" asp-for="@Model.Let.Kopilot.Id">
+                        <option value=""></option>
+                        @foreach (var kopilot in Model.Piloti)
+                        {
+                            <option value="@kopilot.Id">@(kopilot.Ime + " " + kopilot.Prezime)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Stjuardese</label>
+                <div class="col-8">
+                    <select class="selectpicker form-control"  data-live-search="true" asp-for="@Model.OdabraneStjuardese" multiple>
+                        
+                        @foreach (var stjuardesa in Model.Stjuardese)
+                        {
+                            <option value="@stjuardesa.Id">@(stjuardesa.Ime + " " + stjuardesa.Prezime)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Saradnicke kompanije</label>
+                <div class="col-8">
+                    <select class="selectpicker form-control"  data-live-search="true"  asp-for="@Model.OdabraneKompanije" multiple>
+                        
+                        @foreach (var kompanija in Model.Kompanije)
+                        {
+                            <option value="@kompanija.Id">@kompanija.Naziv</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            @if (Model.Let.ID == Guid.Empty)
+            {
+                <button type="submit" asp-page-handler="create" class="btn btn-block btn-primary">Dodaj</button>
+            }
+            else
+            {
+                <input type="hidden" class="form-control" asp-for="@Model.Let.ID" value="@Model.Let.ID" />
+                <button type="submit" asp-page-handler="update" class="btn btn-block btn-info">Azuriraj</button>
+                <a class="btn btn-block btn-primary mt-1" href="Let">Kreiraj nov let</a>
+            }
+
+
+        </form>
+    </div>
+</div>
+<table class="table table-striped mt-5 mb-5">
+    <thead>
+        <tr>
+            <th scope="col">Vreme poletanja</th>
+            <th scope="col">Vreme sletanja</th>
+            <th scope="col">Tip</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var let in Model.ListaLetova)
+        {
+            <tr>
+                <th scope="row">@let.VremePoletanja</th>
+                <td>@let.VremeSletanja</td>
+                @if (let.Putnicki)
+                {
+                    <td>Putnicki</td>
+                }
+                else
+                {
+                    <td>Teretni</td>
+                }
+                <td>
+                    <form method="post">
+                        <button class="btn btn-danger" asp-page-handler="delete" asp-route-id="@let.ID">Obrisi</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="Let?id=@let.ID" class="btn btn-info">Azuriraj</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

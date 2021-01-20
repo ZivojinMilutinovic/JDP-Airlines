@@ -1,0 +1,116 @@
+﻿@page
+@model JDP_Airlines.Pages.StjuardesaModel
+@{
+    ViewData["Title"] = "Stjuardesa";
+}
+
+<h1>Dobrodosli na stranicu za stjuardese</h1>
+<br />
+<div class="row">
+    <div class="col-6">
+        <h4>Prikaz prethodnih letova</h4>
+        <table class="table table-striped mb-5">
+            <thead>
+                <tr>
+                    <th scope="col">Od</th>
+                    <th scope="col">Ka</th>
+                    <th scope="col">Vreme poletanja</th>
+                    <th scope="col">Vreme sletanja</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var let in Model.Stjuardesa.Letovi.OrderBy(x => x.VremePoletanja))
+                {
+                    if (let.VremeSletanja < DateTime.Now)
+                    {
+                        <tr>
+                            <th>@(let.LetiSa.Grad + ", " + let.LetiSa.Drzava)</th>
+                            <td>@(let.LetiNa.Grad + ", " + let.LetiNa.Drzava)</td>
+                            <td>@let.VremePoletanja</td>
+                            <td>@let.VremeSletanja</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-6">
+        <h4>Prikaz buducih letova</h4>
+        <table class="table table-striped mb-5">
+            <thead>
+                <tr>
+                    <th scope="col">Od</th>
+                    <th scope="col">Ka</th>
+                    <th scope="col">Vreme poletanja</th>
+                    <th scope="col">Vreme sletanja</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var let in Model.Stjuardesa.Letovi.OrderBy(x => x.VremePoletanja))
+                {
+                    if (let.VremeSletanja > DateTime.Now)
+                    {
+                        <tr>
+                            <th>@(let.LetiSa.Grad + ", " + let.LetiSa.Drzava)</th>
+                            <td>@(let.LetiNa.Grad + ", " + let.LetiNa.Drzava)</td>
+                            <td>@let.VremePoletanja</td>
+                            <td>@let.VremeSletanja</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <h4>Kolege stjuardese na letovima</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Ime</th>
+                <th scope="col">Prezime</th>
+                <th scope="col">Broj zajednickih letova</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var kolega in Model.Kolege.OrderBy(x => x.Value))
+            {
+                <tr>
+                    <th>@kolega.Key.Ime</th>
+                    <td>@kolega.Key.Prezime</td>
+                    <td>@kolega.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model.Kolege.Count == 0)
+    {
+        <label style="font-size:20px;">Trenutno nema kolega!</label>
+    }
+</div>
+
+<div class="row mt-5 mb-5">
+    <h4>Putovanja i ukupno vreme</h4>
+    @foreach (var putovanje in Model.LetoviPresedanja.Values.Distinct())
+    {
+        <div class="col-12">
+            @{
+                string aerodrom = "";
+                double vreme;
+                DateTime pocetak = DateTime.MinValue;
+                JDP_Airlines.Models.Let trenutniLet = new Models.Let();
+                foreach (var let in Model.LetoviPresedanja.Where(x => x.Value == putovanje).Select(x => x.Key))
+                {
+                    if (pocetak == DateTime.MinValue)
+                        pocetak = let.VremePoletanja;
+                    trenutniLet = let;
+                    aerodrom += let.LetiSa.Grad + ", " + let.LetiSa.Drzava + " \u279c ";
+                }
+                aerodrom += trenutniLet.LetiNa.Grad + ", " + trenutniLet.LetiNa.Drzava;
+                vreme = (trenutniLet.VremeSletanja - pocetak).TotalHours;
+                aerodrom += " (" + vreme + "h)";
+            }
+            @aerodrom
+        </div>
+    }
+</div>

@@ -1,0 +1,90 @@
+﻿@page
+@model JDP_Airlines.Pages.Admin.PilotModel
+@{
+}
+
+<h2 class="text-center mb-3">
+    @if (Model.Pilot.Id == Guid.Empty)
+    {
+        <span>Napravi pilota</span>
+    }
+    else
+    {
+        <span>Azuriraj pilota</span>
+    }
+
+</h2>
+<div class="row justify-content-center">
+    <div class="col-6">
+        <form method="post">
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Ime</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Pilot.Ime" value="@Model.Pilot.Ime" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Prezime</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Pilot.Prezime" value="@Model.Pilot.Prezime" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Godine staza</label>
+                <div class="col-10">
+                    <input type="number" class="form-control" asp-for="@Model.Pilot.GodineStaza" value="@Model.Pilot.GodineStaza" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Starost</label>
+                <div class="col-10">
+                    <input type="number" class="form-control" asp-for="@Model.Pilot.Starost" value="@Model.Pilot.Starost" />
+                </div>
+            </div>
+            @if (Model.Pilot.Id == Guid.Empty)
+            {
+                <button type="submit" asp-page-handler="create" class="btn btn-block btn-primary">Kreiraj</button>
+            }
+            else
+            {
+                <input type="hidden" class="form-control" asp-for="@Model.Pilot.Id" value="@Model.Pilot.Id" />
+                <button type="submit" asp-page-handler="update" class="btn btn-block btn-info">Azuriraj</button>
+                <a class="btn btn-block btn-primary mt-1" href="Pilot">Kreiraj novog pilota</a>
+            }
+
+
+        </form>
+    </div>
+</div>
+<table class="table table-striped mt-5 mb-5">
+    <thead>
+        <tr>
+            <th scope="col">Ime</th>
+            <th scope="col">Prezime</th>
+            <th scope="col">Godine staza</th>
+            <th scope="col">Starost</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pilot in Model.ListaPilota)
+        {
+            <tr>
+                <th>@pilot.Ime</th>
+                <td>@pilot.Prezime</td>
+                <td>@pilot.GodineStaza</td>
+                <td>@pilot.Starost</td>
+                <td>
+                    <form method="post">
+                        <button class="btn btn-danger" asp-page-handler="delete" asp-route-id="@pilot.Id">Obrisi</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="Pilot?Id=@pilot.Id" class="btn btn-info">Azuriraj</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

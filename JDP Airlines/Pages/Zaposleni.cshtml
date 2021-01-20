@@ -1,0 +1,133 @@
+﻿@page
+@model JDP_Airlines.Pages.ZaposleniModel
+@{
+}
+<script>
+    $('select').selectpicker();
+</script>
+<h2 class="text-center mb-5">Dobrodosli </h2>
+
+<div class="row">
+    @for (int i = 0; i < Model.ListaEntiteta.Length; i++)
+    {
+        <div class="col-4 mb-2">
+            <div class="card" style="width: 18rem; height: 25rem">
+                <img style="height:10rem" src="@Model.ListaSlika[i]" class="card-img-top" alt="@Model.ListaEntiteta[i]">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">@Model.ListaEntiteta[i]</h5>
+                    <p class="card-text">@Model.ListaOpisa[i]</p>
+                    <a href="Admin/@Model.LinkoviZaStranice[i]" class="btn btn-primary">Prikazi</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<hr />
+<div class="row">
+    <div class="col">
+        <h3 class="text-center mt-2 mb-5">Izaberite putnike koje zelite da dodate na letove</h3>
+        <form method="post">
+            <div class="row justify-content-center mb-3">
+
+                <select class="selectpicker" multiple data-live-search="true" asp-for="@Model.LetoviGuid">
+                    @foreach (var let in Model.Letovi)
+                    {
+                        <option value="@let.ID">@let.GetNaziv()</option>
+                    }
+                </select>
+                <div class="mb-4"><i class="bi  bi-chevron-double-left ml-2 mr-1"></i><i class="bi bi-chevron-double-right ml-1 mr-2"></i></div>
+                <select class="selectpicker" multiple data-live-search="true" asp-for="@Model.PutniciPasosi">
+                    @foreach (var putnik in Model.Putnici)
+                    {
+                        <option value="@putnik.BrojPasosa">@putnik.GetNaziv()</option>
+                    }
+                </select>
+            </div>
+            <div class="row ">
+                <div class="mr-1">
+                    <span class="mr-1">Putnik ne postoji na letu?</span> <a class="btn btn-primary" href="Admin/Putnik">Dodaj putnika</a>
+                </div>
+                <button asp-page-handler="putnik" class=" ml-1 btn btn-block col-4 btn-info ">Povezi putnike i letove</button>
+            </div>
+
+
+        </form>
+    </div>
+
+    <div class="col">
+        <h3 class="text-center mt-2 mb-5">Izaberite sve robe kargo koje zelite da dodate na letove</h3>
+        <form method="post">
+            <div class="row justify-content-center mb-3">
+
+                <select class="selectpicker" multiple data-live-search="true" asp-for="@Model.KargoLetoviGuid">
+                    @foreach (var let in Model.KargoLetovi)
+                    {
+                        <option value="@let.ID">@let.GetNaziv()</option>
+                    }
+                </select>
+                <div class="mb-4"><i class="bi  bi-chevron-double-left ml-2 mr-1"></i><i class="bi bi-chevron-double-right ml-1 mr-2"></i></div>
+                <select class="selectpicker" multiple data-live-search="true" asp-for="@Model.KargoGuid">
+                    @foreach (var kargo in Model.RobaKargo)
+                    {
+                        <option value="@kargo.ID">@kargo.TipRoba</option>
+                    }
+                </select>
+            </div>
+            <div class="row ">
+                <div class="mr-1">
+                    <span class="mr-1">Zelite da doate novu robu?</span><a class="btn btn-primary" href="Admin/Kargo">Dodaj roba kargo</a>
+                </div>
+                <button asp-page-handler="kargo" class="btn ml-1 btn-block col-4 btn-info ">Povezi robu i letove</button>
+            </div>
+        </form>
+    </div>
+</div>
+<h3 class="text-center mt-3 mb-3">Pronadji izgubleni prtljag</h3>
+<div class="row m-5">
+    <div class="col">
+        <form method="post">
+            <div class="form-group">
+                <label>Unesite pasos za koji se trazi izgubleni prljag</label>
+                <select class="form-control" asp-for="@Model.BrojPasosa">
+                    @foreach (var putnik in Model.Putnici)
+                    {
+                    <option value="@putnik.BrojPasosa">@putnik.BrojPasosa</option>
+                    }
+                </select>
+            </div>
+            <button class="btn btn-primary" asp-page-handler="prtljag">Potrazi</button>
+        </form>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Informacije o pronadjenom putniku</h5>
+                <div class="card-text">
+                    @if (Model.ErrorMessage != null)
+                    {
+                        <p>@Model.ErrorMessage</p>
+                    }
+                    else if (Model.Putnik != null && Model.Let!=null)
+                    {
+                        <p>
+                            Puno ime:@Model.Putnik.Ime @Model.Putnik.Prezime,Broj
+                            pasosa:@Model.Putnik.BrojPasosa
+                        </p>
+                        <p>
+                            Let:@Model.AerodromSa.Naziv - @Model.AerodromNa.Naziv
+                            Vreme:@Model.Let.VremePoletanja.ToString() - @Model.Let.VremeSletanja.ToString()
+                        </p>
+                    }
+                    else
+                    {
+                        <p>Nista nije pronadjeno.</p>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

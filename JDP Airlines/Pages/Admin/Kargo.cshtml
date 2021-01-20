@@ -1,0 +1,99 @@
+﻿@page
+@model JDP_Airlines.Pages.Admin.KargoModel
+@{
+    ViewData["Title"] = "Kargo";
+}
+
+<h2 class="text-center mb-3">
+    @if (Model.Kargo.ID == Guid.Empty)
+    {
+        <span>Napravi robu ili teret</span>
+    }
+    else
+    {
+        <span>Azuriraj robu ili teret</span>
+    }
+
+</h2>
+<div class="row justify-content-center">
+    <div class="col-6">
+        <form method="post">
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Tip Robe</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Kargo.TipRoba" value="@Model.Kargo.TipRoba" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Tezina</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Kargo.Tezina" value="@Model.Kargo.Tezina" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Sirina</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Kargo.Sirina" value="@Model.Kargo.Sirina" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Duzina</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Kargo.Duzina" value="@Model.Kargo.Duzina" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Visina</label>
+                <div class="col-10">
+                    <input type="number" class="form-control" asp-for="@Model.Kargo.Visina" value="@Model.Kargo.Visina" />
+                </div>
+            </div>
+            @if (Model.Kargo.ID == Guid.Empty)
+            {
+                <button type="submit" asp-page-handler="create" class="btn btn-block btn-primary">Kreiraj</button>
+            }
+            else
+            {
+                <input type="hidden" class="form-control" asp-for="@Model.Kargo.ID" value="@Model.Kargo.ID" />
+                <button type="submit" asp-page-handler="update" class="btn btn-block btn-info">Azuriraj</button>
+                <a class="btn btn-block btn-primary mt-1" href="Kargo">Kreiraj nov teret ili kargo</a>
+            }
+
+
+        </form>
+    </div>
+</div>
+<table class="table table-striped mt-5 mb-5">
+    <thead>
+        <tr>
+            <th scope="col">Tip Robe</th>
+            <th scope="col">Tezina</th>
+            <th scope="col">Sirina</th>
+            <th scope="col">Duzina</th>
+            <th scope="col">Visina</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var kargo in Model.ListaRobaKargo)
+        {
+            <tr>
+                <th>@kargo.TipRoba</th>
+                <td>@kargo.Tezina</td>
+                <td>@kargo.Sirina</td>
+                <td>@kargo.Duzina</td>
+                <td>@kargo.Visina</td>
+                <td>
+                    <form method="post">
+                        <button class="btn btn-danger" asp-page-handler="delete" asp-route-id="@kargo.ID">Obrisi</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="Kargo?id=@kargo.ID" class="btn btn-info">Azuriraj</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

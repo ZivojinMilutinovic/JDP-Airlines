@@ -1,0 +1,99 @@
+﻿@page
+@model JDP_Airlines.Pages.Admin.PutnikModel
+@{
+    ViewData["Title"] = "Putnik";
+}
+
+<h2 class="text-center mb-3">
+    @if (String.IsNullOrEmpty(Model.Putnik.BrojPasosa))
+    {
+        <span>Napravi putnika</span>
+    }
+    else
+    {
+        <span>Azuriraj putnika</span>
+    }
+
+</h2>
+<div class="row justify-content-center">
+    <div class="col-6">
+        <form method="post">
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Broj pasosa</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Putnik.BrojPasosa" value="@Model.Putnik.BrojPasosa" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Email adresa</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Putnik.Email" value="@Model.Putnik.Email" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Ime</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Putnik.Ime" value="@Model.Putnik.Ime" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">Prezime</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Putnik.Prezime" value="@Model.Putnik.Prezime" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2 col-form-label">BrojBodova</label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="@Model.Putnik.BrojBodova" value="@Model.Putnik.BrojBodova" />
+                </div>
+            </div>
+            @if (String.IsNullOrEmpty(Model.Putnik.BrojPasosa))
+            {
+                <button type="submit" asp-page-handler="create" class="btn btn-block btn-primary">Kreiraj</button>
+            }
+            else
+            {
+                <input type="hidden" class="form-control" asp-for="@Model.Putnik.BrojPasosa" value="@Model.Putnik.BrojPasosa" />
+                <button type="submit" asp-page-handler="update" class="btn btn-block btn-info">Azuriraj</button>
+                <a class="btn btn-block btn-primary mt-1" href="Putnik">Kreiraj novog putnik</a>
+            }
+
+
+        </form>
+    </div>
+</div>
+<table class="table table-striped mt-5 mb-5">
+    <thead>
+        <tr>
+            <th scope="col">Broj pasosa</th>
+            <th scope="col">Email adresa</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Prezime</th>
+            <th scope="col">Broj bodova</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var putnik in Model.ListaPutnika)
+        {
+            <tr>
+                <th>@putnik.BrojPasosa</th>
+                <td>@putnik.Email</td>
+                <td>@putnik.Ime</td>
+                <td>@putnik.Prezime</td>
+                <td>@putnik.BrojPasosa</td>
+                <td>
+                    <form method="post">
+                        <button class="btn btn-danger" asp-page-handler="delete" asp-route-brPasosa="@putnik.BrojPasosa">Obrisi</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="Putnik?brPasosa=@putnik.BrojPasosa" class="btn btn-info">Azuriraj</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

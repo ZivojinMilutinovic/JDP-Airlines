@@ -1,0 +1,98 @@
+﻿@page
+@model JDP_Airlines.Pages.Admin.AerdromModel
+@{
+}
+
+<h2 class="text-center mb-3">
+    @if (Model.Aerdrom.Id == Guid.Empty)
+    {
+        <span>Napravi aerodrom</span>
+    }
+    else
+    {
+        <span>Azuriraj aerodrom</span>
+    }
+
+</h2>
+<div class="row justify-content-center">
+      <div class="col-6">
+          <form method="post">
+              <div class="form-group row">
+                  <label class="col-2 col-form-label">Oznaka</label>
+                  <div class="col-10">
+                      <input class="form-control" asp-for="@Model.Aerdrom.Oznaka" value="@Model.Aerdrom.Oznaka" />
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-2 col-form-label">Grad</label>
+                  <div class="col-10">
+                      <input class="form-control" asp-for="@Model.Aerdrom.Grad" value="@Model.Aerdrom.Grad" />
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-2 col-form-label">Drzava</label>
+                  <div class="col-10">
+                      <input class="form-control" asp-for="@Model.Aerdrom.Drzava" value="@Model.Aerdrom.Drzava" />
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-2 col-form-label">Naziv</label>
+                  <div class="col-10">
+                      <input class="form-control" asp-for="@Model.Aerdrom.Naziv" value="@Model.Aerdrom.Naziv" />
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-2 col-form-label">Broj pisti</label>
+                  <div class="col-10">
+                      <input type="number" class="form-control" asp-for="@Model.Aerdrom.BrojPisti" value="@Model.Aerdrom.BrojPisti" />
+                  </div>
+              </div>
+              @if (Model.Aerdrom.Id == Guid.Empty)
+              {
+                  <button type="submit" asp-page-handler="create" class="btn btn-block btn-primary">Kreiraj</button>
+              }
+              else
+              {
+                  <input type="hidden" class="form-control" asp-for="@Model.Aerdrom.Id" value="@Model.Aerdrom.Id" />
+                  <button type="submit" asp-page-handler="update" class="btn btn-block btn-info">Azuriraj</button>
+                  <a class="btn btn-block btn-primary mt-1" href="Aerdrom">Kreiraj nov aerodrom</a>
+              }
+
+
+          </form>
+      </div>
+</div>
+<table class="table table-striped mt-5 mb-5">
+    <thead>
+        <tr>
+            <th scope="col">Oznaka</th>
+            <th scope="col">Naziv</th>
+            <th scope="col">Grad</th>
+            <th scope="col">Drzava</th>
+            <th scope="col">Broj pisti</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var aerdrom in Model.ListaAerdrom)
+        {
+        <tr>
+            <th scope="row">@aerdrom.Oznaka</th>
+            <td>@aerdrom.Naziv</td>
+            <td>@aerdrom.Grad</td>
+            <td>@aerdrom.Drzava</td>
+            <td>@aerdrom.BrojPisti</td>
+            <td>
+                <form method="post">
+                    <button class="btn btn-danger" asp-page-handler="delete" asp-route-id="@aerdrom.Id">Obrisi</button>
+                </form>
+            </td>
+            <td>
+                    <a href="Aerdrom?id=@aerdrom.Id" class="btn btn-info">Azuriraj</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+
+</table>

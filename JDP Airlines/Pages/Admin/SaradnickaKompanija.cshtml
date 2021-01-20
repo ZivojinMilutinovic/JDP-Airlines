@@ -1,0 +1,85 @@
+﻿@page
+@model JDP_Airlines.Pages.Admin.SaradnickaKompanijaModel
+@{
+}
+<h2 class="text-center mb-3">
+    @if (Model.SaradnickaKompanija.Id == Guid.Empty)
+    {
+        <span>Napravi kompaniju</span>
+    }
+    else
+    {
+        <span>Azuriraj kompaniju</span>
+    }
+
+</h2>
+<div class="row justify-content-center">
+    <div class="col-6">
+        <form method="post">
+            <div class="form-group row">
+                <label class="col-3 col-form-label">Naziv</label>
+                <div class="col-9">
+                    <input class="form-control" asp-for="@Model.SaradnickaKompanija.Naziv" value="@Model.SaradnickaKompanija.Naziv" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-3 col-form-label">Tip saradnje</label>
+                <div class="col-9">
+                    <input class="form-control" asp-for="@Model.SaradnickaKompanija.TipSaradnje" value="@Model.SaradnickaKompanija.TipSaradnje" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-3 col-form-label">Cena usluge</label>
+                <div class="col-9">
+                    <input type="number" class="form-control" asp-for="@Model.SaradnickaKompanija.CenaUsluge" value="@Model.SaradnickaKompanija.CenaUsluge" required />
+                </div>
+            </div>
+            
+            @if (Model.SaradnickaKompanija.Id == Guid.Empty)
+            {
+                <button type="submit" asp-page-handler="create" class="btn btn-block btn-primary">Kreiraj</button>
+            }
+            else
+            {
+                <input type="hidden" class="form-control" asp-for="@Model.SaradnickaKompanija.Id" value="@Model.SaradnickaKompanija.Id" />
+                <button type="submit" asp-page-handler="update" class="btn btn-block btn-info">Azuriraj</button>
+                <a class="btn btn-block btn-primary mt-1" href="SaradnickaKompanija">Kreiraj novu kompaniju</a>
+            }
+
+
+        </form>
+    </div>
+</div>
+<table class="table table-striped mt-5 mb-5">
+    <thead>
+        <tr>
+            
+            <th scope="col">Naziv</th>
+            <th scope="col">Tip saradnje</th>
+            <th scope="col">Cena usluge</th>
+           
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var saradnickaKompanija in Model.ListaSaradnickaKompanija)
+        {
+            <tr>
+                <th scope="row">@saradnickaKompanija.Naziv</th>
+                <td>@saradnickaKompanija.TipSaradnje</td>
+                <td>@saradnickaKompanija.CenaUsluge</td>
+            
+                <td>
+                    <form method="post">
+                        <button class="btn btn-danger" asp-page-handler="delete" asp-route-id="@saradnickaKompanija.Id">Obrisi</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="SaradnickaKompanija?id=@saradnickaKompanija.Id" class="btn btn-info">Azuriraj</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

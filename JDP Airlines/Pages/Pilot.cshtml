@@ -1,0 +1,84 @@
+﻿@page "{id}"
+@model JDP_Airlines.Pages.PilotModel
+@{
+    ViewData["Title"] = "Pilot";
+}
+
+<h2>Dobrodosao/la @Model.Pilot.Ime @Model.Pilot.Prezime</h2>
+
+<hr />
+
+<div class="row mt-2">
+    <div class="col-4">
+        <div class="row mb-2 pl-3">
+            <h5>Ime: @Model.Pilot.Ime</h5>
+        </div>
+        <div class="row mb-2 pl-3">
+            <h5>Prezime: @Model.Pilot.Prezime</h5>
+        </div>
+        <div class="row mb-2 pl-3">
+            <h5>Godine: @Model.Pilot.Starost</h5>
+        </div>
+        <div class="row mb-2 pl-3">
+            <h5>Godine Staza: @Model.Pilot.GodineStaza </h5>
+        </div>
+        <label>Prethodne saradnje sa kompanijama: </label>
+        <div class="list-group">
+            @foreach (var kompanija in Model.Kompanije)
+            {
+                <a href="#" class="list-group-item list-group-item-action">@kompanija.Naziv - "@kompanija.TipSaradnje"</a>
+
+            }
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="row">
+            <form method="post">
+                <h4 class="mr-2">Prikazite detaljnje informacije za let </h4>
+                <select asp-for="@Model.IzabranLet">
+                    @foreach (var let in Model.ListaLetova)
+                    {
+                        <option value="@let.ID">@let.LetiSa.Grad &#10140; @let.LetiNa.Grad @let.VremePoletanja.ToString()</option>
+                    }
+                </select>
+                <input type="hidden" value="@Model.IzabranLet" />
+                <button type="submit" asp-route-id="@Model.Pilot.Id" class="btn-sm btn-primary ml-2" asp-page-handler="osvezi">Osvezi podatke</button>
+            </form>
+        </div>
+        <div class="row mb-2 mt-2">
+            <label>
+                Pilot: @Model.LetDetalji.Pilot.Ime @Model.LetDetalji.Pilot.Prezime
+                Kopilot: @Model.LetDetalji.Kopilot.Ime @Model.LetDetalji.Kopilot.Prezime
+            </label>
+        </div>
+        <div class="row mb-2">
+            <label>Aeorodrom polaska: @Model.LetDetalji.LetiSa.Naziv @Model.LetDetalji.LetiSa.Grad, @Model.LetDetalji.LetiSa.Drzava</label>
+        </div>
+        <div class="row mb-2">
+            <label>Aeorodrom dolaska: @Model.LetDetalji.LetiNa.Naziv - @Model.LetDetalji.LetiNa.Grad, @Model.LetDetalji.LetiNa.Drzava</label>
+        </div>
+        <div class="row mb-2">
+            <label>Vreme polaska: @Model.LetDetalji.VremePoletanja   Vreme dolaska: @Model.LetDetalji.VremeSletanja </label>
+        </div>
+        <div class="row mb-2">
+            <label>Vreme polaska: @Model.LetDetalji.VremePoletanja   Vreme dolaska: @Model.LetDetalji.VremeSletanja </label>
+        </div>
+        <div class="row mb-2">
+            <label>Stjuardese na letu: </label>
+            @foreach (var stjuardesa in @Model.LetDetalji.Stjuardese)
+            {
+        <span>@stjuardesa.Ime @stjuardesa.Prezime &nbsp;</span>
+            }
+        </div>
+        <div class="row mb-2">
+            <label>Roba na letu: </label>
+            @foreach (var roba in @Model.LetDetalji.Roba)
+            {
+        <span>@roba.TipRoba &nbsp;</span>
+            }
+        </div>
+        <div class="row mb-2">
+            <label>Broj putnika na letu: @Model.LetDetalji.Putnici.Count</label>
+        </div>
+    </div>
+</div>
